@@ -1,0 +1,24 @@
+name: Test
+on:
+  workflow_dispatch:
+    inputs:
+      url:
+        description: "CRL URL"
+        required: true
+        type: string
+
+jobs:
+  lint-crls:
+    runs-on: ubuntu-latest
+    steps:
+    # Checkout this repo:
+    - uses: actions/checkout@v3
+    # Python:
+    - uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+    - run: pip install pipx
+    - run: pipx install pkilint
+    - run: curl -sSL "${{ inputs.url }}" -o input.crl
+    - run: lint_crl lint -f JSON -t CRL -p BR input.crl 
+
