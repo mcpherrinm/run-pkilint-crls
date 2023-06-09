@@ -20,6 +20,9 @@ jobs:
     - name: lint_crl on all CRLs
       run: |
         for CRL in CRLs/*; do
-          lint_crl lint -f JSON -t CRL -p BR "$CRL"
+          echo "$CRL:"
+          openssl crl -inform DER -noout -crlnumber -lastupdate -issuer < "$CRL"
+          echo "Lint results:"
+          lint_crl lint -t CRL -p BR "$CRL"
         done
 
