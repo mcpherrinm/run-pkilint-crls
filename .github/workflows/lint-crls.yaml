@@ -1,11 +1,6 @@
 name: Test
 on:
-  workflow_dispatch:
-    inputs:
-      url:
-        description: "CRL URL"
-        required: true
-        type: string
+  workflow_dispatch
 
 jobs:
   lint-crls:
@@ -19,6 +14,12 @@ jobs:
         python-version: '3.9'
     - run: pip install pipx
     - run: pipx install pkilint
-    - run: curl -sSL "${{ inputs.url }}" -o input.crl
-    - run: lint_crl lint -f JSON -t CRL -p BR input.crl 
+    - run: mkdir CRLs
+    - run: curl -sSZ 'http://stg.c.lencr.org/{4169287449788112,58367272336442518}/[0-127].crl' -o 'CRLs/stg_#1_#2.crl'
+    - run: curl -sSZ 'http://prod.c.lencr.org/{20506757847264211,67430855296768143}/[0-127].crl' -o 'CRLs/prod_#1_#2.crl'
+    - name: lint_crl on all CRLs
+      run: |
+        for CRL in CRLs/*; do
+          lint_crl lint -f JSON -t CRL -p BR "$CRL"
+        done
 
