@@ -10,12 +10,12 @@ jobs:
     # Python:
     - uses: actions/setup-python@v4
       with:
-        python-version: '3.11'
+        python-version: '3.12'
     - run: pip install pipx
     - run: pipx install pkilint
     - run: mkdir CRLs
-    - run: curl -sSZ 'http://stg.c.lencr.org/{4169287449788112,58367272336442518}/[0-127].crl' -o 'CRLs/stg_#1_#2.crl'
-    - run: curl -sSZ 'http://prod.c.lencr.org/{20506757847264211,67430855296768143}/[0-127].crl' -o 'CRLs/prod_#1_#2.crl'
+    - run: curl -sSZ 'http://stg.c.lencr.org/{4169287449788112,58367272336442518}/[1-128].crl' -o 'CRLs/stg_#1_#2.crl'
+    - run: curl -sSZ 'http://prod.c.lencr.org/{20506757847264211,67430855296768143}/[1-128].crl' -o 'CRLs/prod_#1_#2.crl'
     - name: lint_crl on all CRLs
       run: |
         for CRL in CRLs/*; do
